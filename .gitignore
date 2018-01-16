@@ -26,3 +26,8 @@ _testmain.go
 build/_workspace
 build/bin
 
+smartpool
+smartpool.log
+epoch
+
+*~

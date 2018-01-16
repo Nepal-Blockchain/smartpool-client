@@ -239,14 +239,14 @@ func (cr *TimestampClaimRepo) NoActiveShares() uint64 {
 }
 
 func (cr *TimestampClaimRepo) Persist(storage smartpool.PersistentStorage) error {
-	smartpool.Output.Printf("Saving active shares to disk...")
+	smartpool.Output.Printf("Saving active shares to disk...\n")
 	cr.mu.RLock()
 	defer cr.mu.RUnlock()
 	gobShares := map[string]gobShare{}
 	var shareID string
 	for _, s := range cr.activeShares {
 		shareID = fmt.Sprintf(
-			"%s-%s",
+			"%s-%v",
 			s.BlockHeader().Hash().Hex(),
 			s.Nonce())
 		gobShares[shareID] = gobShare{
@@ -268,14 +268,14 @@ func (cr *TimestampClaimRepo) Persist(storage smartpool.PersistentStorage) error
 	}
 	cr.claimMu.RLock()
 	defer cr.claimMu.RUnlock()
-	smartpool.Output.Printf("Saving active claims to disk...")
+	smartpool.Output.Printf("Saving active claims to disk...\n")
 	if err := cr.persistActiveClaims(storage); err != nil {
 		smartpool.Output.Printf("Failed. (%s)\n", err.Error())
 		return err
 	} else {
 		smartpool.Output.Printf("Done.\n")
 	}
-	smartpool.Output.Printf("Saving open claims to disk...")
+	smartpool.Output.Printf("Saving open claims to disk...\n")
 	if err := cr.persistOpenClaims(storage); err != nil {
 		smartpool.Output.Printf("Failed. (%s)\n", err.Error())
 		return err
@@ -322,7 +322,7 @@ func (cr *TimestampClaimRepo) AddShare(s smartpool.Share) error {
 	defer cr.mu.Unlock()
 	share := s.(*Share)
 	shareID := fmt.Sprintf(
-		"%s-%s",
+		"%s-%v",
 		share.BlockHeader().Hash().Hex(),
 		share.Nonce())
 	if share.BlockHeader().Coinbase.Hex() != cr.coinbase {
@@ -370,7 +370,7 @@ func (cr *TimestampClaimRepo) getCurrentClaim(threshold int) smartpool.Claim {
 			c.AddShare(s)
 		} else {
 			shareID := fmt.Sprintf(
-				"%s-%s",
+				"%s-%v",
 				s.BlockHeader().Hash().Hex(),
 				s.Nonce())
 			newActiveShares[shareID] = s
