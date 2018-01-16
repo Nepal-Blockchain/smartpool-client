@@ -25,8 +25,8 @@ type jsonHeader struct {
 	Bloom       *types.Bloom      `json:"logsBloom"`
 	Difficulty  *hexutil.Big      `json:"difficulty"`
 	Number      *hexutil.Big      `json:"number"`
-	GasLimit    *hexutil.Big      `json:"gasLimit"`
-	GasUsed     *hexutil.Big      `json:"gasUsed"`
+	GasLimit    hexutil.Uint64    `json:"gasLimit"`
+	GasUsed     hexutil.Uint64    `json:"gasUsed"`
 	Time        *hexutil.Big      `json:"timestamp"`
 	Extra       *hexutil.Bytes    `json:"extraData"`
 	MixDigest   *common.Hash      `json:"mixHash"`
@@ -68,8 +68,8 @@ func (g *GethRPC) GetPendingBlockHeader() (*types.Header, error) {
 	result.ReceiptHash = *header.ReceiptHash
 	result.Difficulty = (*big.Int)(header.Difficulty)
 	result.Number = (*big.Int)(header.Number)
-	result.GasLimit = (*big.Int)(header.GasLimit)
-	result.GasUsed = (*big.Int)(header.GasUsed)
+	result.GasLimit = uint64(header.GasLimit)
+	result.GasUsed = uint64(header.GasUsed)
 	result.Time = (*big.Int)(header.Time)
 	result.Coinbase = g.ContractAddr
 	// result.Extra = []byte("0xd883010505846765746887676f312e372e348664617277696e")
